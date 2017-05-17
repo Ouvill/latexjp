@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-
+MAINTAINER Ouvill
 RUN apt-get update && apt-get install -y software-properties-common
 
 # install texlive
