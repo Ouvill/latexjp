@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 MAINTAINER Ouvill
-RUN apt-get update && apt-get install -y software-properties-common
+RUN apt-get update && apt-get install -y wget unzip software-properties-common
 
 # install texlive
 RUN add-apt-repository -y ppa:jonathonf/texlive
