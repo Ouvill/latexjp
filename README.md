@@ -1,1 +1,1 @@
-LaTeXjp
+# LaTeX Container for Japanese Documents
