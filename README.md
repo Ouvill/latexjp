@@ -5,10 +5,9 @@
 ## 特徴
 
 - Ubuntu 24.04ベース
-- 完全なTeXLive インストール
+- 日本語文書のビルドに必要なTeXLiveパッケージ
 - 日本語フォント（IPA、Noto CJK）
-- LaTeX関連ツール（latexmk、pandoc等）
-- 複数プラットフォーム対応（AMD64、ARM64）
+- LaTeX関連ツール（latexmk、pandoc）
 
 ## 使用方法
 
@@ -74,18 +73,35 @@ docker run --rm -v $(pwd):/workspace latexjp platex document.tex
 
 ### タグ付けルール
 
-- `latest`: デフォルトブランチの最新コミット
+- `latest`: デフォルトブランチ（master）の最新コミット
 - ブランチ名: ブランチ名がタグとして付与
 - セマンティックバージョン: `v1.0.0`形式のタグから`1.0.0`、`1.0`、`1`が生成
 
+### 必要な設定
+
+ワークフローを実行するために特別な環境変数設定は不要です。ただし、以下を確認してください：
+
+1. **リポジトリ設定**: Settings → Actions → General → Workflow permissions で `Read and write permissions` を選択
+2. **パッケージ可視性**: 初回ビルド後、Packagesタブでパッケージを `Public` に設定
+
 ## インストールされているパッケージ
 
-- TeXLive Full
-- 日本語LaTeXパッケージ
-- LuaTeX、XeTeX
-- latexmk（LaTeX自動コンパイルツール）
-- pandoc（文書変換ツール）
-- 各種日本語フォント
+### LaTeX関連
+- `texlive-lang-japanese` - 日本語LaTeXパッケージ
+- `texlive-latex-extra` - 追加LaTeXパッケージ
+- `texlive-luatex` - LuaTeX
+- `texlive-extra-utils` - LaTeX追加ユーティリティ
+- `latexmk` - LaTeX自動コンパイルツール
+- `pandoc` - 文書変換ツール
+
+### フォント
+- `fonts-ipaexfont` - IPA拡張フォント
+- `fonts-noto-cjk-extra` - Noto CJK追加フォント
+- `fonts-linuxlibertine` - Linux Libertineフォント
+
+### 環境設定
+- 作業ディレクトリ: `/workspace`
+- 日本語環境変数設定済み
 
 ## ライセンス
 
