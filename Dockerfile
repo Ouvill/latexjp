@@ -10,8 +10,13 @@ RUN apt-get update && apt-get -y install \
   fonts-ipaexfont \
   fonts-noto-cjk-extra \
   fonts-linuxlibertine \
+  locales \
   # remove apt cache
   && rm -rf /var/lib/apt/lists/*
+
+# Generate Japanese locale
+RUN locale-gen ja_JP.UTF-8 && \
+    update-locale LANG=ja_JP.UTF-8
 
 # Set working directory
 WORKDIR /workspace
