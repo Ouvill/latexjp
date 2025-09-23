@@ -103,6 +103,85 @@ docker run --rm -v $(pwd):/workspace latexjp platex document.tex
 - 作業ディレクトリ: `/workspace`
 - 日本語環境変数設定済み
 
+## カスタムフォントの追加
+
+このコンテナには基本的な日本語フォントが含まれていますが、特定のフォントを使用したい場合は以下の方法で追加できます。
+
+### 方法1: ボリュームマウントでフォントを追加
+
+ローカルのフォントファイルをコンテナにマウントして使用する方法：
+
+```bash
+# フォントディレクトリをマウント
+docker run --rm \
+  -v $(pwd):/workspace \
+  -v /path/to/your/fonts:/usr/share/fonts/truetype/custom \
+  ghcr.io/ouvill/latexjp:latest \
+  bash -c "fc-cache -fv && lualatex document.tex"
+```
+
+### 方法2: Dockerfileで永続的にフォントを追加
+
+独自のDockerfileを作成してフォントを永続的に追加：
+
+```dockerfile
+FROM ghcr.io/ouvill/latexjp:latest
+
+# カスタムフォントをコピー
+COPY fonts/ /usr/share/fonts/truetype/custom/
+
+# フォントキャッシュを更新
+RUN fc-cache -fv
+```
+
+### 方法3: 初期化スクリプトでフォントをダウンロード
+
+特定のフォントを自動ダウンロードする例：
+
+```dockerfile
+FROM ghcr.io/ouvill/latexjp:latest
+
+# 例：Source Han Serif（思源宋体）をダウンロード
+RUN wget -O /tmp/SourceHanSerif.zip \
+    "https://github.com/adobe-fonts/source-han-serif/releases/download/2.001R/09_SourceHanSerifJP.zip" && \
+    unzip /tmp/SourceHanSerif.zip -d /usr/share/fonts/truetype/ && \
+    rm /tmp/SourceHanSerif.zip && \
+    fc-cache -fv
+```
+
+### LaTeX文書でのフォント指定
+
+LuaLaTeXを使用する場合、`fontspec`パッケージでフォントを指定できます：
+
+```latex
+\documentclass{ltjsarticle}
+\usepackage{fontspec}
+\usepackage{luatexja-fontspec}
+
+% システムフォントを指定
+\setmainfont{Times New Roman}
+\setjmainfont{Noto Serif CJK JP}
+
+% または直接フォントファイルを指定
+\setjmainfont[Path=/usr/share/fonts/truetype/custom/]{YourCustomFont.ttf}
+
+\begin{document}
+カスタムフォントでの日本語テキスト
+\end{document}
+```
+
+### フォントの確認
+
+利用可能なフォントを確認するコマンド：
+
+```bash
+# コンテナ内でフォント一覧を表示
+docker run --rm ghcr.io/ouvill/latexjp:latest fc-list : family
+
+# 日本語フォントのみ表示
+docker run --rm ghcr.io/ouvill/latexjp:latest fc-list :lang=ja
+```
+
 ## ライセンス
 
 このプロジェクトのライセンスについては、[LICENSE.md](LICENSE.md)を参照してください。
