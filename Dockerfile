@@ -10,6 +10,8 @@ RUN apt-get update && apt-get -y install \
   fonts-ipaexfont \
   fonts-noto-cjk-extra \
   fonts-linuxlibertine \
+  # Add Inkscape for SVG support
+  inkscape \
   locales \
   # remove apt cache
   && rm -rf /var/lib/apt/lists/*
